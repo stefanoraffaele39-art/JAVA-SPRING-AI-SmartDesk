@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: smartdesk-api
+  datasource:
+    url: jdbc:postgresql://localhost:5432/smartdesk
+    username: smartdesk
+    password: smartdesk
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false

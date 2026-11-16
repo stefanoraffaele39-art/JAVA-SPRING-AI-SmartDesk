@@ -1,0 +1,15 @@
+services:
+  postgres:
+    image: postgres:17
+    container_name: smartdesk-postgres
+    environment:
+      POSTGRES_DB: smartdesk
+      POSTGRES_USER: smartdesk
+      POSTGRES_PASSWORD: smartdesk
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
