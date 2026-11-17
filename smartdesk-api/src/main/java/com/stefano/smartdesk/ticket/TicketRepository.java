@@ -9,4 +9,6 @@ import org.springframework.data.repository.query.Param;
 public interface TicketRepository extends JpaRepository<Ticket, Long>{
     @Query("SELECT t FROM Ticket t WHERE t.author.id = :id")
     List<Ticket> findByAuthorId(@Param("id") Long id);
+
+    boolean existsByCategoryId(Long categoryId);
 }
