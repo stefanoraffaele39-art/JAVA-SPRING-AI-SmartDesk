@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 
@@ -52,7 +53,7 @@ public class CategoryController {
         CategoryResponse created = service.create(request);
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
-        .path("{/id}")
+        .path("/{id}")
         .buildAndExpand(created.id())
         .toUri();
         
@@ -60,7 +61,7 @@ public class CategoryController {
     }
     
     @Operation (summary = "Update di una categoria")
-    @PostMapping("/{id}")
+    @PutMapping("/{id}")
     public CategoryResponse update(@PathVariable Long id,
                                     @Valid @RequestBody CategoryRequest request
     ) {

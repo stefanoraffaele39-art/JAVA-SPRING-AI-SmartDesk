@@ -11,4 +11,6 @@ public interface TicketRepository extends JpaRepository<Ticket, Long>{
     List<Ticket> findByAuthorId(@Param("id") Long id);
 
     boolean existsByCategoryId(Long categoryId);
+
+    boolean existsByAuthorIdOrAssigneeId(Long authorId, Long assigneeId);
 }
