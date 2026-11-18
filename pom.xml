@@ -24,5 +24,6 @@
     <properties>
         <java.version>21</java.version>
         <springdoc.version>3.2.0</springdoc.version>
+        <mapstruct.version>1.6.3</mapstruct.version>
     </properties>
 </project>
