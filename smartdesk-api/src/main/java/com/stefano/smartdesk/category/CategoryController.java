@@ -7,6 +7,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.stefano.smartdesk.category.dto.CategoryRequest;
 import com.stefano.smartdesk.category.dto.CategoryResponse;
+import com.stefano.smartdesk.common.dto.PageResponse;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -15,6 +16,10 @@ import jakarta.validation.Valid;
 import java.net.URI;
 import java.util.List;
 
+import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -37,8 +42,11 @@ public class CategoryController {
 
     @Operation (summary = "Ritorna la lista di categorie")
     @GetMapping()
-    public List<CategoryResponse> findAll() {
-        return service.findAll();
+    public PageResponse<CategoryResponse> findAll(
+        @ParameterObject 
+        @PageableDefault (size = 20, sort = "name", direction = Sort.Direction.ASC)
+        Pageable pageable) {
+        return service.findAll(pageable);
     }
 
     @Operation (summary = "Ritorna la categoria con l'id specificato")
