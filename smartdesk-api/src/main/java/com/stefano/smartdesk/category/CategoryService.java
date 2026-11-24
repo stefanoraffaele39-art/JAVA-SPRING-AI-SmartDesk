@@ -2,11 +2,14 @@ package com.stefano.smartdesk.category;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.stefano.smartdesk.category.dto.CategoryRequest;
 import com.stefano.smartdesk.category.dto.CategoryResponse;
 import com.stefano.smartdesk.category.mapper.CategoryMapper;
+import com.stefano.smartdesk.common.dto.PageResponse;
 import com.stefano.smartdesk.common.exception.BusinessRuleException;
 import com.stefano.smartdesk.common.exception.DuplicateResourceException;
 import com.stefano.smartdesk.common.exception.ResourceNotFoundException;
@@ -28,10 +31,11 @@ public class CategoryService {
     }
 
     @Transactional (readOnly = true)
-    public List<CategoryResponse> findAll(){
-        return categoryRepository.findAll().stream()
-        .map(categoryMapper::toResponse)
-        .toList();
+    public PageResponse<CategoryResponse> findAll(Pageable pageable){
+        Page<CategoryResponse> page = categoryRepository.findAll(pageable)
+        .map(categoryMapper::toResponse);
+
+        return PageResponse.from(page);
     }
 
     @Transactional (readOnly = true)

@@ -2,6 +2,7 @@ package com.stefano.smartdesk.common.exception;
 
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -52,6 +53,13 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleUnreadable(HttpMessageNotReadableException ex, HttpServletRequest req) {
         return build(HttpStatus.BAD_REQUEST, "Corpo della richiesta non leggibile o con valori non ammessi", req);
     }
+
+    // 400: parametro obbligatorio mancante (es. /users/by-role senza ?role=)
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    public ResponseEntity<ErrorResponse> handleMissingParam(MissingServletRequestParameterException ex,
+                                                        HttpServletRequest req) {
+        return build(HttpStatus.BAD_REQUEST, "Parametro obbligatorio mancante: " + ex.getParameterName(), req);
+}
 
     // 400: parametro del tipo sbagliato (es. /tickets/abc)
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)

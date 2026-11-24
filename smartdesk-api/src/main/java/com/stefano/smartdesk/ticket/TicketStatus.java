@@ -4,5 +4,14 @@ public enum TicketStatus {
     OPEN,
     IN_PROGRESS,
     RESOLVED,
-    CLOSED
+    CLOSED;
+
+    public boolean canTransitionTo(TicketStatus next){
+        return switch(this){
+            case OPEN -> next == IN_PROGRESS; 
+            case IN_PROGRESS -> next == RESOLVED;
+            case RESOLVED -> next == CLOSED || next == OPEN;
+            case CLOSED -> false;
+        };
+    }
 }
