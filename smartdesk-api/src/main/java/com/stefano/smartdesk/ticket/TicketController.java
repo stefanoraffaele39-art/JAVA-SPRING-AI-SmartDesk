@@ -1,6 +1,7 @@
 package com.stefano.smartdesk.ticket;
 
 import java.net.URI;
+import java.util.List;
 
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Pageable;
@@ -21,6 +22,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.stefano.smartdesk.common.dto.PageResponse;
 import com.stefano.smartdesk.ticket.dto.AssignTicketRequest;
 import com.stefano.smartdesk.ticket.dto.ChangeStatusRequest;
+import com.stefano.smartdesk.ticket.dto.CommentResponse;
+import com.stefano.smartdesk.ticket.dto.CreateCommentRequest;
 import com.stefano.smartdesk.ticket.dto.CreateTicketRequest;
 import com.stefano.smartdesk.ticket.dto.TicketResponse;
 import com.stefano.smartdesk.ticket.dto.TicketStatsResponse;
@@ -115,4 +118,17 @@ public class TicketController {
         return service.getStats();
     }
 
+    @Operation (summary = "Ritorna una lista di commenti per uno specifico ticket")
+    @GetMapping("/{id}/comments")
+    public List<CommentResponse> getComments(@PathVariable Long id) {
+        return service.findComments(id);
+    }
+    
+    @Operation (summary = "Crea e aggiungi un commento ad un ticket")
+    @PostMapping("/{id}/comments")
+    @ResponseStatus (HttpStatus.CREATED)
+    public CommentResponse addComment(@PathVariable Long id ,@Valid @RequestBody CreateCommentRequest request) {
+        return service.addComment(id, request);
+    }
+    
 }

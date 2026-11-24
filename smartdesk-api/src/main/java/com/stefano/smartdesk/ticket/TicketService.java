@@ -2,6 +2,7 @@ package com.stefano.smartdesk.ticket;
 
 import java.time.Instant;
 import java.util.EnumMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.data.domain.Page;
@@ -16,10 +17,13 @@ import com.stefano.smartdesk.common.exception.BusinessRuleException;
 import com.stefano.smartdesk.common.exception.ResourceNotFoundException;
 import com.stefano.smartdesk.ticket.dto.AssignTicketRequest;
 import com.stefano.smartdesk.ticket.dto.ChangeStatusRequest;
+import com.stefano.smartdesk.ticket.dto.CommentResponse;
+import com.stefano.smartdesk.ticket.dto.CreateCommentRequest;
 import com.stefano.smartdesk.ticket.dto.CreateTicketRequest;
 import com.stefano.smartdesk.ticket.dto.TicketResponse;
 import com.stefano.smartdesk.ticket.dto.TicketStatsResponse;
 import com.stefano.smartdesk.ticket.dto.UpdateTicketRequest;
+import com.stefano.smartdesk.ticket.mapper.CommentMapper;
 import com.stefano.smartdesk.ticket.mapper.TicketMapper;
 import com.stefano.smartdesk.user.User;
 import com.stefano.smartdesk.user.UserRepository;
@@ -29,17 +33,21 @@ import com.stefano.smartdesk.user.UserRole;
 @Service 
 @Transactional 
 public class TicketService {
+    private final CommentRepository commentRepository;
     private final CategoryRepository categoryRepository;
     private final TicketRepository ticketRepository;
     private final UserRepository userRepository;
     private final TicketMapper ticketMapper;
+    private final CommentMapper commentMapper;
 
     public TicketService(CategoryRepository categoryRepository, TicketRepository ticketRepository,
-            UserRepository userRepository, TicketMapper ticketMapper) {
+            UserRepository userRepository, TicketMapper ticketMapper, CommentRepository commentRepository, CommentMapper commentMapper) {
         this.categoryRepository = categoryRepository;
         this.ticketRepository = ticketRepository;
         this.userRepository = userRepository;
         this.ticketMapper = ticketMapper;
+        this.commentRepository = commentRepository;
+        this.commentMapper = commentMapper;
     }
 
     @Transactional (readOnly = true)
@@ -123,6 +131,28 @@ public class TicketService {
         long total = byStatus.values().stream().mapToLong(Long::longValue).sum();
 
         return new TicketStatsResponse(total, byStatus, byPriority);
+    }
+
+    @Transactional (readOnly = true)
+    public List<CommentResponse> findComments(Long ticketId){
+        if(!ticketRepository.existsById(ticketId)){
+            throw new ResourceNotFoundException("Ticket", ticketId);
+        }
+
+        return commentRepository.findByTicketIdOrderByCreatedAtAsc(ticketId).stream()
+        .map(commentMapper::toResponse)
+        .toList();
+    }
+
+    public CommentResponse addComment(Long ticketId, CreateCommentRequest request){
+        Ticket ticket = getTicketOrThrow(ticketId);
+        User author = getUserOrThrow(request.authorId());
+
+        Comment comment = commentMapper.toEntity(request);
+        comment.setAuthor(author);
+        ticket.addComment(comment);
+
+        return commentMapper.toResponse(commentRepository.save(comment));
     }
 
 
