@@ -34,3 +34,6 @@ build/
 
 .env
 *.log
+
+### Documenti di lavoro (non pubblicati) ###
+docs/SmartDesk_roadmap_v0.1.0.md
