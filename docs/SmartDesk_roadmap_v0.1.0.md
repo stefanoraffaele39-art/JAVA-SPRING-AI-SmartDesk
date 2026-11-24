@@ -1,7 +1,7 @@
 # SmartDesk – Roadmap v0.1.0 (Backend base)
 
 > Roadmap preparata il 17 novembre 2026 per completare la v0.1.0.
-> Stato aggiornato al 20 novembre 2026: passi 1 e 2 completati (pull request #2 unita su `main`), lavoro in corso sul branch `feature/ticket-api`.
+> Stato aggiornato al 24 novembre 2026: passi 1–5 completati (pull request #2, #3 e #4 unite su `main`; README e collection Postman aggiunti). Resta il passo 6, il rilascio.
 
 **Obiettivo della v0.1.0:** con `docker compose up -d` e l'avvio dell'app si provano tutte le API da Swagger, con i dati di esempio già caricati.
 
@@ -58,16 +58,16 @@ Il modello per tutto il resto.
 
 ---
 
-## Passo 3 – API dei ticket (la parte più ricca)
+## Passo 3 – API dei ticket (la parte più ricca) ✅
 
-- [ ] `TicketMapper` con `uses = {UserMapper.class, CategoryMapper.class}`
+- [x] `TicketMapper` con `uses = {UserMapper.class, CategoryMapper.class}`
   - `toEntity(CreateTicketRequest)` ignora `status`, `createdAt`, `updatedAt`, `closedAt`, `author`, `assignee`, `category`, `comments`
-- [ ] `TicketService`
-  - [ ] `create`: carica autore e categoria dai repository (404 se non esistono), poi `ticket.setAuthor(...)` e `ticket.setCategory(...)`
-  - [ ] `findById`, `update`, `delete`
-  - [ ] lista paginata con filtri facoltativi `status`, `priority`, `categoryId`, `assigneeId`, per esempio con `@Query` e parametri nulli: `(:status IS NULL OR t.status = :status)`
-  - [ ] `@EntityGraph(attributePaths = {"author", "assignee", "category"})` sui metodi di lettura del repository, contro il problema N+1
-- [ ] Cambio di stato (`PATCH /tickets/{id}/status`), con la regola nell'enum:
+- [x] `TicketService`
+  - [x] `create`: carica autore e categoria dai repository (404 se non esistono), poi `ticket.setAuthor(...)` e `ticket.setCategory(...)`
+  - [x] `findById`, `update`, `delete`
+  - [x] lista paginata con filtri facoltativi `status`, `priority`, `categoryId`, `assigneeId`, per esempio con `@Query` e parametri nulli: `(:status IS NULL OR t.status = :status)`
+  - [x] `@EntityGraph(attributePaths = {"author", "assignee", "category"})` sui metodi di lettura del repository, contro il problema N+1
+- [x] Cambio di stato (`PATCH /tickets/{id}/status`), con la regola nell'enum:
 
   ```java
   public boolean canTransitionTo(TicketStatus next) {
@@ -82,36 +82,36 @@ Il modello per tutto il resto.
 
   - passaggio non consentito → `BusinessRuleException` (409)
   - stato `CLOSED` → valorizzare `closedAt`
-- [ ] Assegnazione (`PATCH /tickets/{id}/assignee`): utente non `AGENT` → `BusinessRuleException`
-- [ ] Statistiche (`GET /tickets/stats`): due query `GROUP BY` (per stato e per priorità) → `TicketStatsResponse` con due `Map`
-- [ ] Commit, uno per blocco:
+- [x] Assegnazione (`PATCH /tickets/{id}/assignee`): utente non `AGENT` → `BusinessRuleException`
+- [x] Statistiche (`GET /tickets/stats`): due query `GROUP BY` (per stato e per priorità) → `TicketStatsResponse` con due `Map`
+- [x] Commit, uno per blocco:
   - `feat: CRUD ticket`
   - `feat: cambio di stato e assegnazione`
   - `feat: statistiche ticket`
 
 ---
 
-## Passo 4 – Commenti
+## Passo 4 – Commenti ✅
 
-- [ ] `CommentMapper`: `toResponse`, con l'autore tramite `UserMapper.toSummary`
-- [ ] `CommentRepository`: `findByTicketIdOrderByCreatedAtAsc`, con `@EntityGraph` su `author`
-- [ ] Endpoint `GET` e `POST /api/v1/tickets/{id}/comments`; il `POST` usa `ticket.addComment(...)`
-- [ ] Commit: `feat: API commenti`
-- [ ] Pull request di `feature/ticket-api` e merge su `main`
+- [x] `CommentMapper`: `toResponse`, con l'autore tramite `UserMapper.toSummary`
+- [x] `CommentRepository`: `findByTicketIdOrderByCreatedAtAsc`, con `@EntityGraph` su `author`
+- [x] Endpoint `GET` e `POST /api/v1/tickets/{id}/comments`; il `POST` usa `ticket.addComment(...)`
+- [x] Commit: `feat: API commenti`
+- [x] Pull request di `feature/ticket-api` e merge su `main`
 
 ---
 
-## Passo 5 – Documentazione e consegna
+## Passo 5 – Documentazione e consegna ✅
 
-- [ ] Collection Postman: una richiesta per endpoint, variabile `baseUrl` = `http://localhost:8080/api/v1`, esportata in `docs/smartdesk.postman_collection.json`
+- [x] Collection Postman: una richiesta per endpoint, variabile `baseUrl` = `http://localhost:8080/api/v1`, esportata in `docs/smartdesk.postman_collection.json`
   - scorciatoia: Import in Postman di `http://localhost:8080/v3/api-docs`
-- [ ] `README.md` con:
+- [x] `README.md` con:
   - a cosa serve il progetto
   - lo stack
   - come avviarlo (`docker compose up -d` e `.\mvnw.cmd -pl smartdesk-api spring-boot:run`)
   - il link a Swagger (`http://localhost:8080/swagger-ui.html`)
   - la tabella degli endpoint
-- [ ] Facoltativo: `@Tag` e `@Operation` di springdoc sui controller
+- [x] Facoltativo: `@Tag` e `@Operation` di springdoc sui controller
 
 ---
 
