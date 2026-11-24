@@ -310,8 +310,7 @@ smartdesk/
 ├── pom.xml                     # POM padre (moduli, versioni)
 ├── docker-compose.yml          # PostgreSQL
 ├── docs/
-│   ├── smartdesk.postman_collection.json
-│   └── SmartDesk_roadmap_v0.1.0.md
+│   └── smartdesk.postman_collection.json
 └── smartdesk-api/
     ├── pom.xml
     └── src/
