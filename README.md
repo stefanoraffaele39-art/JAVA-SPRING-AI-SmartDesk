@@ -330,7 +330,7 @@ smartdesk/
 
 | Versione | Contenuto | Stato |
 | --- | --- | --- |
-| **v0.1.0** | Backend base: API REST, regole di business, gestione errori, Swagger, collection Postman | In rilascio |
+| **v0.1.0** | Backend base: API REST, regole di business, gestione errori, Swagger, collection Postman | Rilasciata |
 | v0.2.0 | Test unitari e di integrazione (JUnit, Mockito, Testcontainers), GitHub Actions | Pianificata |
 | v0.3.0 | Assistente AI: chatbot con RAG su una knowledge base (Spring AI, Qdrant, OpenAI / Ollama), chat memory | Pianificata |
 | v0.4.0 | Server MCP con tool sui ticket (trasporti stdio e HTTP+SSE) | Pianificata |
