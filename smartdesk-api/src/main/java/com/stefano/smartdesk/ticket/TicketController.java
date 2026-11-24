@@ -112,7 +112,7 @@ public class TicketController {
         return service.assign(id, request);
     }
     
-    @Operation (summary = "Statistiche dei ticket per stato e prioritá")
+    @Operation (summary = "Statistiche dei ticket per stato e priorità")
     @GetMapping ("/stats")
     public TicketStatsResponse stats(){
         return service.getStats();
